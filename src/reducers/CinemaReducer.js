@@ -2,7 +2,7 @@ import actionTypes from "../types/types";
 
 const initialState = {
     isLoading: false,
-    movies: null,
+    cinema: null,
     error: null,
   }
   
@@ -17,7 +17,7 @@ const initialState = {
         return {
           ...state,
           isLoading: false,
-          movies: payload
+          cinema: payload
         }
       case actionTypes.LOAD_FAILURE:
         return {

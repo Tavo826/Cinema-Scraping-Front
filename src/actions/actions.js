@@ -1,12 +1,33 @@
 import actionTypes from "../types/types";
 import axios from "axios";
 
-export const getCinema = () => (dispatch) => {
+const BASE_URL = "http://localhost:8080/api/cinema";
+
+export const createCinema = (cinema) => (dispatch) => {
+    dispatch(Loading())
+
+    const requestConfig = {
+        method: "POST",
+        url: `${BASE_URL}/create`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(cinema)
+    }
+
+    axios.request(requestConfig).then(response => {
+        dispatch(LoadSuccess(response.data))
+    }).catch(error => {
+        dispatch(LoadError(error.message))
+    })
+}
+
+export const getCinema = (id) => (dispatch) => {
     dispatch(Loading())
 
     const requestConfig = {
         method: 'GET',
-        url: 'http://localhost:8080/api/cinema'
+        url: `${BASE_URL}/${id}`,
     }
 
     axios.request(requestConfig).then(function (response) {
@@ -17,16 +38,16 @@ export const getCinema = () => (dispatch) => {
 
 }
 
-export const scrapMovies = () => (dispatch) => {
+export const scrapMovies = (scrap) => (dispatch) => {
     dispatch(Loading())
 
     const requestConfig = {
         method: 'POST',
-        url: 'http://localhost:8080/api/cinema/scrapmovies',
+        url: `${BASE_URL}/addMovies`,
         headers: {
             'Content-Type': 'application/json',
         },
-        data: JSON.stringify({type: "sofka.cinema.create"})
+        data: JSON.stringify(scrap)
     }
 
     axios.request(requestConfig).then(function (response) {

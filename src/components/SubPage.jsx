@@ -66,6 +66,7 @@ const SubPage = ({movies}) => {
                 <input 
                     type="text" 
                     className="form-control" 
+                    placeholder="Buscar Nombre Película..."
                     value={search}
                     onChange={onSearchChange}
                 />

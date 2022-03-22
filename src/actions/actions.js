@@ -15,8 +15,8 @@ export const createCinema = (cinema) => (dispatch) => {
         data: JSON.stringify(cinema)
     }
 
-    axios.request(requestConfig).then(response => {
-        dispatch(LoadSuccess(response.data))
+    axios.request(requestConfig).then(() => {
+        dispatch(getCinema(cinema.cinemaId))
     }).catch(error => {
         dispatch(LoadError(error.message))
     })
@@ -31,7 +31,11 @@ export const getCinema = (id) => (dispatch) => {
     }
 
     axios.request(requestConfig).then(function (response) {
-        dispatch(LoadSuccess(response.data))
+        if (response.data !== null) {
+            dispatch(LoadSuccess(response.data))
+        } else {
+            dispatch(LoadSuccess({}))
+        }
     }).catch(function (error) {
         dispatch(LoadError(error))
     })
@@ -51,11 +55,9 @@ export const scrapMovies = (scrap) => (dispatch) => {
     }
 
     axios.request(requestConfig).then(function (response) {
-        setTimeout(() => {            
-            dispatch(getCinema())
-        }, 30000)
+        dispatch(Loading())
     }).catch(function (error) {
-        dispatch(LoadError(error))
+        dispatch(LoadError(error.message))
     })   
 
 }
@@ -68,6 +70,7 @@ export const Loading = () => {
 }
 
 export const LoadSuccess = (cinema) => {
+
     return {
         type: actionTypes.LOAD_SUCCESS,
         payload: cinema

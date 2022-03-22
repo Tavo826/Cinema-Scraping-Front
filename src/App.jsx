@@ -9,7 +9,7 @@ function App() {
       <div className="page-header">
         <h1 className="text-center mt-3">Cinema</h1>
       </div>
-      <div className="container mt-5">
+      <div className="container mt-5 mb-5">
         <Cinema />
       </div>
 

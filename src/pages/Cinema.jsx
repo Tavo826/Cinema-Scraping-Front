@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getCinema, scrapMovies } from "../actions/actions"
 import CinemaForm from "../components/CinemaForm"
+import SubPage from "../components/SubPage"
 
 const Cinema = () => {
 
@@ -11,82 +12,49 @@ const Cinema = () => {
 
     useEffect(() => {
         dispatch(getCinema("xxxx"))
-    }, [])
+    }, [cinema.name])
 
 
     useEffect(() => {
-        const socket = new WebSocket('ws://' + 'localhost:8080' + '/retrieve/' + 'xxxx')
+        const socket = new WebSocket('ws://' + 'localhost:8080' + '/retrieve/' + "xxxx")
         socket.onmessage = function (m) {
+            // console.log("Mensaje: ", m.data);
             const data = JSON.parse(m.data)
-            dispatch(data.type)
-            console.log('Message' + data.type);
+            console.log('Message: ', data.type);
             dispatch(getCinema("xxxx"))
         }
     }, [])
 
+    const handleAddMovies = () => {
+        dispatch(scrapMovies({
+            type: "sofka.cinema.addmovies",
+            cinemaId: "xxxx"
+        }))
+    }
 
     return (
         <>      
             {
-                cinema
-                ? <div className="container-flid">
-                    <div className="row text-center">
-                        <div className="col-5"><h2>{cinema.name}</h2></div> 
-                        <div className="col-7"><h6>Actualizar películas</h6></div>
+                cinema.name
+                ? <div className="container-fluid">
+                    <div className="row text-center pt-5">
+                        <div className="col-8"><h2>{cinema.name}</h2></div> 
+                        <button className="col-4 btn btn-primary" onClick={handleAddMovies}><h6>Actualizar películas</h6></button>
                     </div>
+                    {
+                        cinema.movies
+                        ? <SubPage movies={cinema.movies} />                   
+                        : <div className="mt-5">
+                            <p>No hay peliculas, actualice el cinema</p>
+                        </div>
+                    }
                 </div>
-                : <CinemaForm />
+                : <div className="mt-5 pt-5">
+                    <p className="mt-2 d-flex justify-content-center">Crea un cinema para obetener las películas</p>
+                    <div className="mt-2"><CinemaForm /></div>
+                </div>  
             }
-            {/* {
-                cinema 
-                ? Object.keys(cinema.movies).map(key => {
-                    return (
-                    <div key={key}>
-
-                        <div className="left-content">
-                        <div className="title">
-                            <h3>{key}</h3>
-                        </div>
-                        <div className="image">
-                            <img src={cinema.movies[key][0][0]} alt="movie image" />
-                        </div>
-                        <div className="data">
-                            <p>Año: {cinema.movies[key][0][1]}</p>
-                            <p>Duración: {cinema.movies[key][0][2]}</p>
-                        </div>
-                        </div>
-                        
-                        <div className="right-content">
-                        <div className="links">
-                            <p>Links Latino:</p>
-                            {cinema.movies[key][1].map((link, index) => {
-                            return (
-                                <a href={link} key={index}>{link} <br /></a>
-                            )
-                            })}
-                            <p>Links Subtitulada:</p>
-                            {cinema.movies[key][2].map((link, index) => {
-                            return (
-                                <a href={link} key={index}>{link} <br /></a>
-                            )
-                            })}
-                            <p>Links Castellano:</p>          
-                            {cinema.movies[key][3].map((link, index) => {
-                            return (
-                                <a href={link} key={index}>{link} <br /></a>
-                            )
-                            })}
-                            
-                        </div>
-                        </div>
-                    </div>
-                    )
-            })
-            : <div className="mt-5">
-                <button className="btn btn-secondary" onClick={() => handleCinema()}>Obtener Cartelera</button>            
-                </div>
-            } */}
-
+            
             {isLoading && <p>Cargando...</p>}
             {error && <p>Error</p>}
 

@@ -2,7 +2,7 @@ import actionTypes from "../types/types";
 
 const initialState = {
     isLoading: false,
-    cinema: null,
+    cinema: {},
     error: null,
   }
   

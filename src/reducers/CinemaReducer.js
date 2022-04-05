@@ -6,7 +6,7 @@ const initialState = {
     error: null,
   }
   
-  const CinemaReducer = (state = initialState, { type, payload }) => {
+  const cinemaReducer = (state = initialState, { type, payload }) => {
     switch (type) {
       case actionTypes.LOADING_SUCCESS:
         return {
@@ -30,4 +30,4 @@ const initialState = {
     }
   }
   
-  export default CinemaReducer
+  export default cinemaReducer

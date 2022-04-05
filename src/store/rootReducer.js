@@ -1,10 +1,14 @@
 import { combineReducers } from "redux";
-import CinemaReducer from "../reducers/CinemaReducer";
+import cinemaReducer from "../reducers/cinemaReducer";
+import authReducer from "../reducers/authReducer";
+import registerReducer from "../reducers/registerReducer";
 
 const rootReducer = () => {
     return combineReducers(
         {
-            cinema: CinemaReducer
+            cinema: cinemaReducer,
+            login: authReducer,
+            register: registerReducer
         }
     )
 }
